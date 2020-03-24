@@ -68,15 +68,13 @@ function addMusicToQueue(message, url){
     message.channel.send("You didn't give me a link to play you beta!\n\nUsage: .play URL");
     return;
   }
-  console.log(message.author);
-  console.log(message.member.voiceChannel);
-  if(!message.member.voiceChannel){
+  if(!message.member.voice.channel){
     message.channel.send("How could you hear me without being in a Voice Channel? Get in one and try again");
     return;
   }
   musicQueue.push(url);
-  if(!message.guild.voiceConnection){
-    message.member.voiceChannel.join().then((connection) => {
+  if(!message.guild.voice.connection){
+    message.member.voice.channel.join().then((connection) => {
       playMusic(message, connection);
     });
   }
