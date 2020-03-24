@@ -27,8 +27,12 @@ bot.on("message", async (message) => {
 	var args = message.content.split(" ");
 	args.shift();
 
-  if(message.content.startsWith(prefix + "testing")){
-    message.channel.send(message.channel);
+  if(message.content.startsWith(prefix + "play")){
+    if(args.length == 0){
+      message.channel.send("Enter The URL To Play\n\nExample: .play https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+    } else {
+      message.channel.play(ytdl(args[0]));
+    }
   }
 
 	if(message.content.startsWith(prefix + "mc")){
@@ -36,12 +40,6 @@ bot.on("message", async (message) => {
 			message.channel.send("---\nServer Name: The\n\nServer Address(IP): hsepercussion.my.pebble.host\n---");
 		}
 		return;
-	}
-
-	if(message.content.startsWith(prefix + "game")){
-		if(args.length == 0 || args[0] == "help"){
-			message.channel.send(".game help\n\t-Show The Help Menu For Games");
-		}
 	}
 });
 
