@@ -33,6 +33,10 @@ bot.on("message", async message => {
 	var args = message.content.split(" ");
 	args.shift();
 
+  if(messsage.content.startsWith(prefix + "testing")){
+    message.channel.send("I'm Here!\nArgs: " + args);
+  }
+
 	if(message.content.startsWith(prefix + "mc")){
 		if(args[0] == "server"){
 			message.channel.send("---\nServer Name: The\n\nServer Address(IP): hsepercussion.my.pebble.host\n---");
