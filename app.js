@@ -5,7 +5,7 @@ const prefix = require("./config.json");
 const ytdl = require("ytdl-core");
 const bot = new Discord.Client();
 
-app.set('port', (process.env.PORT || 5000));
+app.set('port', process.env.PORT);
 app.get('/', function(req, res) {
     var result = 'App is running'
     res.send(result);
