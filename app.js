@@ -27,7 +27,7 @@ bot.on("message", async (message) => {
   if (!message.content.startsWith(prefix)) return;
 
   var args = message.content.split(" ");
-	var command = commands.shift().substring(1);
+	var command = args.shift().substring(1);
 
   console.log(command);
   console.log(args);
