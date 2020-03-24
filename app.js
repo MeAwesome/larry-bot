@@ -46,7 +46,7 @@ bot.on("message", async (message) => {
 
 function playMusic(message, url){
   if(!url){
-    message.content.send("You didn't give me a link to play you beta!\n\nUsage: .play URL");
+    message.channel.send("You didn't give me a link to play you beta!\n\nUsage: .play URL");
   }
 }
 
