@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+/*const Discord = require("discord.js");
 const express = require("express");
 const app = express();
 const prefix = require("./config.json");
@@ -51,4 +51,4 @@ bot.on("message", async message => {
 	}
 });
 
-bot.login(process.env.BOT_TOKEN);
+bot.login(process.env.BOT_TOKEN);*/
