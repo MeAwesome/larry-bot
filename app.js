@@ -4,8 +4,8 @@ const ytdl = require("ytdl-core");
 const client = new Discord.Client();
 const queue = new Map();
 
-console.log(prefix);
-console.log(token);
+//console.log("Prefix: " + prefix);
+//console.log("Token: " + token);
 
 client.once("ready", () => {
   console.log("Ready!");
