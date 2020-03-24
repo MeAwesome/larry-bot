@@ -24,7 +24,6 @@ bot.on("message", async message => {
   console.log("I Got A Message");
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
-	const serverQueue = queue.get(message.guild.id);
 
 	var args = message.content.split(" ");
 	args.shift();
