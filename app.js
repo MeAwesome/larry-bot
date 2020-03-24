@@ -1,14 +1,12 @@
 const Discord = require("discord.js");
-//const express = require("express");
-//const app = express();
+const express = require("express");
+const app = express();
+const serv = require("http").Server(app);
 const ytdl = require("ytdl-core");
 const bot = new Discord.Client();
 const prefix = ".";
 
-//app.set('port', process.env.PORT);
-//app.listen(app.get('port'), function() {
-    //console.log('App is running, server is listening on port ', app.get('port'));
-//});
+serv.listen(process.env.PORT);
 
 bot.once("ready", () => {
   console.log("Larry Is Ready");
