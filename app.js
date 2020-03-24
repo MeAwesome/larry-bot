@@ -21,14 +21,13 @@ bot.once("disconnect", () => {
 });
 
 bot.on("message", async (message) => {
-  console.log("I Got A Message: " + message);
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
 
 	var args = message.content.split(" ");
 	args.shift();
 
-  if(messsage.content.startsWith(prefix + "testing")){
+  if(message.content.startsWith(prefix + "testing")){
     message.channel.send("I'm Here!\nArgs: " + args);
   }
 
