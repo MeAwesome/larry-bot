@@ -20,7 +20,7 @@ bot.once("disconnect", () => {
   console.log("Larry Died");
 });
 
-bot.on("message", async message => {
+bot.on("message", async (message) => {
   console.log("I Got A Message");
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
