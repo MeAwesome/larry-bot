@@ -13,6 +13,13 @@ app.get('/', function(req, res) {
     console.log('App is running, server is listening on port ', app.get('port'));
 });
 
+var reqTimer = setTimeout(function wakeUp() {
+   request("https://larry-discord-bot.herokuapp.com", function() {
+      console.log("WAKE UP DYNO");
+   });
+   return reqTimer = setTimeout(wakeUp, 1200000);
+}, 1200000);
+
 bot.once("ready", () => {
   console.log("Larry Is Ready");
 });
