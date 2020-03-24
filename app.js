@@ -1,161 +1,146 @@
-var express = require("express");
-var os = require("os");
-var moment = require("moment");
-var app = express();
-var serv = require("http").Server(app);
-var io = require("socket.io")(serv,{});
-var port = process.env.PORT || 51000;
-const fs = require('fs');
-const readline = require('readline');
-const google = require('googleapis').google;
-app.get("/", function(req, res){
-	res.sendFile(__dirname + "/public/index.html");
-});
-app.use("/public", express.static(__dirname + "/public"));
-serv.listen(port);
-if(port != process.env.PORT){
-		__ConnectTo__ = os.networkInterfaces()["Wi-Fi"][1].address + ":" + port || os.networkInterfaces()["Ethernet"][1].address + ":" + port;
-	console.clear();
-	console.log("--> Webpage Started On } " + __ConnectTo__);
-}
+const Discord = require("discord.js");
+const { prefix, token } = require("./config.json");
+const ytdl = require("ytdl-core");
+const client = new Discord.Client();
+const queue = new Map();
 
-
-
-var connections = {};
-var refreshFrequency = 5; //Fastest Value is 5
-var scheduleLayout = [];
-var schedules = [];
-var lastSecond = moment().get("second");
-
-io.on("connection", function(socket){
-
-	connections[socket.id] = new Connection(socket);
-
-	socket.emit("connected_to_server");
-
-	socket.emit("layout_data", scheduleLayout);
-
-	socket.on("disconnect", () => {
-		delete connections[socket.id];
-	});
-
+client.once("ready", () => {
+  console.log("Ready!");
 });
 
-function Connection(socket){
-	this.socket = socket;
-	this.socketId = socket.id;
-}
+client.once("reconnecting", () => {
+  console.log("Reconnecting!");
+});
 
-function sendScheduleLayout(){
-	io.emit("layout_data", scheduleLayout);
-}
+client.once("disconnect", () => {
+  console.log("Disconnect!");
+});
 
-function sendTime(){
-	if(moment().get("second") != lastSecond){
-		lastSecond = moment().get("second");
-		io.emit("current_time", {
-			hour:moment().get("hour"),
-			minute:moment().get("minute"),
-			second:moment().get("second")
-		});
-	}
-}
+client.on("message", async message => {
+  if (message.author.bot) return;
+  if (!message.content.startsWith(prefix)) return;
+	const serverQueue = queue.get(message.guild.id);
 
-function runner(auth){
-	sheets = google.sheets({version: 'v4', auth});
-	ticks = 0;
-	miniTicks = 0;
-	setInterval(async() => {
-		if(ticks == 0){
-			var mostRecent = await getLayout("Monthly Planner");
-			if(!arraysEqual(scheduleLayout, mostRecent)){
-				scheduleLayout = mostRecent;
-				sendScheduleLayout();
-			}
-			if(miniTicks == 0){
+	var args = message.content.split(" ");
+	args.shift();
 
-			}
-			miniTicks = (miniTicks + 1) % (refreshFrequency * 5);
+	if(message.content.startsWith(prefix + "mc")){
+		if(args[0] == "server"){
+			message.channel.send("---\nServer Name: The\n\nServer Address(IP): hsepercussion.my.pebble.host\n---");
 		}
-		sendTime();
-		ticks = (ticks + 1) % (refreshFrequency * 10);
-	}, 100);
-}
+		return;
+	}
 
-function arraysEqual(a1,a2){
-	return JSON.stringify(a1) == JSON.stringify(a2);
-}
+	if(message.content.startsWith(prefix + "game")){
+		if(args.length == 0 || args[0] == "help"){
+			message.channel.send(".game help\n\t-Show The Help Menu For Games");
+		}
+		if(args[0] == ""){
 
+		}
+	}
 
-
-
-
-const SCOPES = ["https://www.googleapis.com/auth/spreadsheets"];
-
-const TOKEN_PATH = 'token.json';
-
-fs.readFile('credentials.json', (err, content) => {
-  if (err) return console.log('Error loading client secret file:', err);
-  authorize(JSON.parse(content), runner);
+  if (message.content.startsWith(prefix + "play")) {
+    execute(message, serverQueue);
+    return;
+  } else if (message.content.startsWith(`${prefix}skip`)) {
+    skip(message, serverQueue);
+    return;
+  } else if (message.content.startsWith(`${prefix}stop`)) {
+    stop(message, serverQueue);
+    return;
+  } else {
+    message.channel.send("You need to enter a valid command!");
+  }
 });
 
-function authorize(credentials, callback) {
-  const client_secret = credentials.installed.client_secret;
-	const client_id = credentials.installed.client_id;
-	const redirect_uris = credentials.installed.redirect_uris;
-  const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
-  fs.readFile(TOKEN_PATH, (err, token) => {
-    if (err) return getNewToken(oAuth2Client, callback);
-    oAuth2Client.setCredentials(JSON.parse(token));
-    callback(oAuth2Client);
-  });
-}
+async function execute(message, serverQueue) {
+  const args = message.content.split(" ");
 
-function getNewToken(oAuth2Client, callback) {
-  const authUrl = oAuth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: SCOPES,
-  });
-  console.log('Authorize this app by visiting this url:', authUrl);
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-	});
-  rl.question('Enter the code from that page here: ', (code) => {
-    rl.close();
-    oAuth2Client.getToken(code, (err, token) => {
-      if (err) return console.error('Error while trying to retrieve access token', err);
-      oAuth2Client.setCredentials(token);
-      fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-        if (err) return console.error(err);
-        console.log('Token stored to', TOKEN_PATH);
-      });
-	    callback(oAuth2Client);
-    });
-  });
-}
+  const voiceChannel = message.member.voice.channel;
+  if (!voiceChannel)
+    return message.channel.send(
+      "You need to be in a voice channel to play music!"
+    );
+  const permissions = voiceChannel.permissionsFor(message.client.user);
+  if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
+    return message.channel.send(
+      "I need the permissions to join and speak in your voice channel!"
+    );
+  }
 
-async function getLayout(sheetName) {
-	var request = {
-    spreadsheetId: '1kCDJnekPOR12K9LcIqjlWf6d9nN-COFThr4fPln_7FM',
-    range: sheetName + '!A2:G',
+  const songInfo = await ytdl.getInfo(args[1]);
+  const song = {
+    title: songInfo.title,
+    url: songInfo.video_url
   };
-	var data = null;
-	sheets.spreadsheets.values.get(request, (err, res) => {
-	   if (err) return console.log('The API returned an error: ' + err);
-	   const rows = res.data.values;
-	   if(rows.length){
-			 data = rows;
-	   } else {
-	     data = undefined;
-	   }
-	 });
-	 return new Promise((resolve) => {
-		 var loaded = setInterval(() => {
-			 if(data != null){
-				 clearInterval(loaded);
-				 resolve(data);
-			 }
-		 }, 100, loaded);
-	 });
+
+  if (!serverQueue) {
+    const queueContruct = {
+      textChannel: message.channel,
+      voiceChannel: voiceChannel,
+      connection: null,
+      songs: [],
+      volume: 5,
+      playing: true
+    };
+
+    queue.set(message.guild.id, queueContruct);
+
+    queueContruct.songs.push(song);
+
+    try {
+      var connection = await voiceChannel.join();
+      queueContruct.connection = connection;
+      play(message.guild, queueContruct.songs[0]);
+    } catch (err) {
+			//console.log("here");
+      //console.log(err);
+      //queue.delete(message.guild.id);
+      return message.channel.send(err);
+    }
+  } else {
+    serverQueue.songs.push(song);
+    return message.channel.send(`${song.title} has been added to the queue!`);
+  }
 }
+
+function skip(message, serverQueue) {
+  if (!message.member.voice.channel)
+    return message.channel.send(
+      "You have to be in a voice channel to stop the music!"
+    );
+  if (!serverQueue)
+    return message.channel.send("There is no song that I could skip!");
+  serverQueue.connection.dispatcher.end();
+}
+
+function stop(message, serverQueue) {
+  if (!message.member.voice.channel)
+    return message.channel.send(
+      "You have to be in a voice channel to stop the music!"
+    );
+  serverQueue.songs = [];
+  serverQueue.connection.dispatcher.end();
+}
+
+function play(guild, song) {
+  const serverQueue = queue.get(guild.id);
+  if (!song) {
+    serverQueue.voiceChannel.leave();
+    queue.delete(guild.id);
+    return;
+  }
+
+  const dispatcher = serverQueue.connection
+    .play(ytdl(song.url))
+    .on("finish", () => {
+      serverQueue.songs.shift();
+      play(guild, serverQueue.songs[0]);
+    })
+    .on("error", error => console.error(error));
+  dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+  serverQueue.textChannel.send(`Start playing: **${song.title}**`);
+}
+
+client.login(token);
