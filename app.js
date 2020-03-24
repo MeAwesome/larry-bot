@@ -6,15 +6,25 @@ const ytdl = require("ytdl-core");
 const bot = new Discord.Client();
 
 app.set('port', (process.env.PORT || 5000));
-
-console.clear();
-
 app.get('/', function(req, res) {
     var result = 'App is running'
     res.send(result);
 }).listen(app.get('port'), function() {
     console.log('App is running, server is listening on port ', app.get('port'));
 });
+
+process.on('SIGTERM', shutdown('SIGTERM')).on('SIGINT', shutdown('SIGINT')).on('uncaughtException', shutdown('uncaughtException'));
+
+function shutdown(signal) {
+  return (err) => {
+    console.log(`${ signal }...`);
+    if (err) console.error(err.stack || err);
+    setTimeout(() => {
+      console.log('...waited 5s, exiting.');
+      process.exit(err ? 1 : 0);
+    }, 5000).unref();
+  };
+}
 
 bot.once("ready", () => {
   console.log("Larry Is Ready");
