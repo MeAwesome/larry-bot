@@ -32,7 +32,7 @@ bot.on("message", async (message) => {
   if(message.content.startsWith(prefix)){
     switch(command){
       case "play":
-        playMusic(message, args[0]);
+        addMusicToQueue(message, args[0]);
         break;
       case "mc":
         if(args[0] == "server"){
