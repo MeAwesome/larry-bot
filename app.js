@@ -68,7 +68,7 @@ function addMusicToQueue(message, url){
     message.channel.send("You didn't give me a link to play you beta!\n\nUsage: .play URL");
     return;
   }
-  console.log(message.member);
+  console.log(message.author);
   console.log(message.member.voiceChannel);
   if(!message.member.voiceChannel){
     message.channel.send("How could you hear me without being in a Voice Channel? Get in one and try again");
