@@ -1,4 +1,4 @@
-/*const Discord = require("discord.js");
+const Discord = require("discord.js");
 const express = require("express");
 const app = express();
 const prefix = require("./config.json");
@@ -6,10 +6,7 @@ const ytdl = require("ytdl-core");
 const bot = new Discord.Client();
 
 app.set('port', process.env.PORT);
-app.get('/', function(req, res) {
-    var result = 'App is running'
-    res.send(result);
-}).listen(app.get('port'), function() {
+app.listen(app.get('port'), function() {
     console.log('App is running, server is listening on port ', app.get('port'));
 });
 
@@ -51,4 +48,4 @@ bot.on("message", async message => {
 	}
 });
 
-bot.login(process.env.BOT_TOKEN);*/
+bot.login(process.env.BOT_TOKEN);
