@@ -6,6 +6,8 @@ const ytdl = require("ytdl-core");
 const bot = new Discord.Client();
 const prefix = ".";
 
+var musicQueue = [];
+
 serv.listen(process.env.PORT);
 
 bot.once("ready", () => {
@@ -44,9 +46,34 @@ bot.on("message", async (message) => {
   }
 });
 
-function playMusic(message, url){
+function playMusic(message, connection){
+  var dispatcher = connection.playStream(ytdl(musicQueue[0], {filter: "audioonly"}));
+
+  musicQueue.shift();
+
+  dispatcher.on("end", () =>{
+    if(musicQueue.length > 0){
+      playMusic(message, connection);
+    } else {
+      connection.disconnect();
+    }
+  });
+}
+
+function addMusicToQueue(message, url){
   if(!url){
     message.channel.send("You didn't give me a link to play you beta!\n\nUsage: .play URL");
+    return;
+  }
+  if(!message.memeber.voiceChannel){
+    message.channel.send("How could you hear me without being in a Voice Channel? Get in one and try again");
+    return;
+  }
+  musicQueue.push(url);
+  if(!message.guild.voiceConnection){
+    message.member.voiceChannel.join().then((connection) => {
+      playMusic(message, connection);
+    });
   }
 }
 
