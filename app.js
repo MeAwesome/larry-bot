@@ -21,7 +21,7 @@ bot.once("disconnect", () => {
 });
 
 bot.on("message", async (message) => {
-  console.log("I Got A Message");
+  console.log("I Got A Message: " + message);
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
 
