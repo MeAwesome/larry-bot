@@ -28,7 +28,7 @@ bot.on("message", async (message) => {
 	args.shift();
 
   if(message.content.startsWith(prefix + "testing")){
-    message.channel.send("I'm Here!\nArgs: " + args);
+    message.channel.send(message);
   }
 
 	if(message.content.startsWith(prefix + "mc")){
