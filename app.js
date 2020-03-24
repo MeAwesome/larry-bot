@@ -26,10 +26,11 @@ bot.on("message", async (message) => {
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
 
-  var commands = message.content.split(" ");
+  var args = message.content.split(" ");
 	var command = commands.shift().substring(1);
-  commands.shift();
-	var args = commands;
+
+  console.log(command);
+  console.log(args);
 
   if(message.content.startsWith(prefix)){
     switch(command){
