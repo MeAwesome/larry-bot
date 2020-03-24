@@ -7,6 +7,8 @@ const bot = new Discord.Client();
 
 app.set('port', (process.env.PORT || 5000));
 
+console.clear();
+
 app.get('/', function(req, res) {
     var result = 'App is running'
     res.send(result);
