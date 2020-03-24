@@ -48,11 +48,3 @@ bot.on("message", async message => {
 });
 
 bot.login(process.env.BOT_TOKEN);
-wakeUp();
-
-function wakeUp(){
-  request("https://larry-discord-bot.herokuapp.com", function() {
-     console.log("WAKE UP DYNO");
-  });
-  setTimeout(wakeUp, 1200000);
-}
