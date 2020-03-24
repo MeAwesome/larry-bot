@@ -13,19 +13,6 @@ app.get('/', function(req, res) {
     console.log('App is running, server is listening on port ', app.get('port'));
 });
 
-process.on('SIGTERM', shutdown('SIGTERM')).on('SIGINT', shutdown('SIGINT')).on('uncaughtException', shutdown('uncaughtException'));
-
-function shutdown(signal) {
-  return (err) => {
-    console.log(`${ signal }...`);
-    if (err) console.error(err.stack || err);
-    setTimeout(() => {
-      console.log('...waited 5s, exiting.');
-      process.exit(err ? 1 : 0);
-    }, 5000).unref();
-  };
-}
-
 bot.once("ready", () => {
   console.log("Larry Is Ready");
 });
