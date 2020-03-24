@@ -73,11 +73,9 @@ function addMusicToQueue(message, url){
     return;
   }
   musicQueue.push(url);
-  if(!message.guild.voice.connection){
-    message.member.voice.channel.join().then((connection) => {
-      playMusic(message, connection);
-    });
-  }
+  message.member.voice.channel.join().then((connection) => {
+    playMusic(message, connection);
+  });
 }
 
 bot.login(process.env.BOT_TOKEN);
