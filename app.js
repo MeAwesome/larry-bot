@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
 const express = require("express");
 const app = express();
-const prefix = require("./config.json");
 const ytdl = require("ytdl-core");
 const bot = new Discord.Client();
+const prefix = ".";
 
 app.set('port', process.env.PORT);
 app.listen(app.get('port'), function() {
@@ -23,6 +23,7 @@ bot.once("disconnect", () => {
 });
 
 bot.on("message", async message => {
+  console.log("I Got A Message");
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
 	const serverQueue = queue.get(message.guild.id);
