@@ -1,6 +1,6 @@
 const Discord = require("discord.js");
-const express = require("express");
-const app = express();
+//const express = require("express");
+//const app = express();
 const ytdl = require("ytdl-core");
 const bot = new Discord.Client();
 const prefix = ".";
