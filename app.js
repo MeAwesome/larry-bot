@@ -29,9 +29,6 @@ bot.on("message", async (message) => {
   var args = message.content.split(" ");
 	var command = args.shift().substring(1);
 
-  console.log(command);
-  console.log(args);
-
   if(message.content.startsWith(prefix)){
     switch(command){
       case "play":
