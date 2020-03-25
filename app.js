@@ -58,6 +58,10 @@ function playMusic(message, connection){
       connection.disconnect();
     }
   });
+
+  dispatcher.on('error', (error) =>{
+    console.log(error)
+  });
 }
 
 function addMusicToQueue(message, url){
