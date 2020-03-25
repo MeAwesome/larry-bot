@@ -6,6 +6,7 @@
     "discord.js": "^12.0.2",
     "express": "^4.17.1",
     "ffmpeg": "^0.0.4",
+    "ffmpeg-binaries": "^3.2.2-3",
     "opusscript": "^0.0.7",
     "prism-media": "^1.2.1",
     "ytdl-core": "^2.0.1"
