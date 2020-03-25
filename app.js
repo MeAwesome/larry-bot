@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const Discord = require("@discord.js");
 const express = require("express");
 const app = express();
 const serv = require("http").Server(app);
