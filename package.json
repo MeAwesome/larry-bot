@@ -5,12 +5,9 @@
   "dependencies": {
     "discord.js": "^12.0.2",
     "express": "^4.17.1",
-    "ffmpeg": "^0.0.4",
     "ffmpeg-binaries": "^3.2.2-3",
-    "npm": "^6.14.2",
+    "ffmpeg-static":"^4.0.1",
     "opusscript": "^0.0.7",
-    "prism-media": "^1.2.1",
-    "ytdl": "^1.2.0",
     "ytdl-core": "^2.0.1"
   },
   "engines": {
