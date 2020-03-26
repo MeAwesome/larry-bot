@@ -47,8 +47,8 @@ bot.on("message", async (message) => {
 });
 
 async function playMusic(message, connection){
-  var source = await ytdl(musicQueue[0], {filter: "audioonly", quality: "highestaudio"});
-  var dispatcher = connection.play(source);
+  //var source = await ytdl(musicQueue[0], {filter: "audioonly", quality: "highestaudio"});
+  var dispatcher = connection.play("/Main_Theme.mp3");
 
   musicQueue.shift();
 
