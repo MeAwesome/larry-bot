@@ -52,17 +52,17 @@ async function playMusic(message, connection){
 
   musicQueue.shift();
 
-  dispatcher.on("end", () =>{
-    if(musicQueue.length > 0){
-      playMusic(message, connection);
-    } else {
-      connection.disconnect();
-    }
-  });
+  //dispatcher.on("end", () =>{
+    //if(musicQueue.length > 0){
+      //playMusic(message, connection);
+    //} else {
+      //connection.disconnect();
+    //}
+//  });
 
-  dispatcher.on("error", (error) =>{
-    console.log(error);
-  });
+  //dispatcher.on("error", (error) =>{
+    //console.log(error);
+  //});
 }
 
 function addMusicToQueue(message, url){
