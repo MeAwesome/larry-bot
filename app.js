@@ -47,22 +47,22 @@ bot.on("message", async (message) => {
 });
 
 async function playMusic(message, connection){
-  //var source = await ytdl(musicQueue[0], {filter: "audioonly", quality: "highestaudio"});
-  var dispatcher = connection.play("/Main_Theme.mp3");
+  var source = await ytdl(musicQueue[0], {filter: "audioonly", quality: "highestaudio"});
+  var dispatcher = connection.play(source);
 
   musicQueue.shift();
 
-  //dispatcher.on("end", () =>{
-    //if(musicQueue.length > 0){
-      //playMusic(message, connection);
-    //} else {
-      //connection.disconnect();
-    //}
-//  });
+  dispatcher.on("end", () =>{
+    if(musicQueue.length > 0){
+      playMusic(message, connection);
+    } else {
+      connection.disconnect();
+    }
+  });
 
-  //dispatcher.on("error", (error) =>{
-    //console.log(error);
-  //});
+  dispatcher.on("error", (error) =>{
+    console.log(error);
+  });
 }
 
 function addMusicToQueue(message, url){
