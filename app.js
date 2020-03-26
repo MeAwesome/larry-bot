@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const express = require("express");
 const app = express();
 const serv = require("http").Server(app);
+const ffmpeg = require("ffmpeg-binaries");
 const ytdl = require("ytdl-core");
 const bot = new Discord.Client();
 const prefix = ".";
@@ -46,7 +47,7 @@ bot.on("message", async (message) => {
   }
 });
 
-function playMusic(message, connection){ 
+function playMusic(message, connection){
   var dispatcher = connection.play(ytdl(musicQueue[0], {filter: "audioonly", quality: "highestaudio"}));
 
   musicQueue.shift();
