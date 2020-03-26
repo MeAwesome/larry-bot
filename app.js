@@ -2,7 +2,6 @@ const Discord = require("discord.js");
 const express = require("express");
 const app = express();
 const serv = require("http").Server(app);
-const ffmpeg = require("ffmpeg");
 const ytdl = require("ytdl-core");
 const bot = new Discord.Client();
 const prefix = ".";
